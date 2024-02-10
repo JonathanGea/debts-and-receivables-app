@@ -137,15 +137,14 @@
         $('#roleSelect').change(function () {
             showLoading()
             selectedRole = $(this).val();
-            $('#welcomeMessage').text('Welcome, ' + selectedRole + ' ' + '{{ currentUser.name }}' + '!');
             CheckRoleAndDisplayData(selectedRole, menu)
 
         });
         $(".navbar button").on("click", function () {
-            $(".navbar button").removeClass("btn-outline-primary");
-            $(".navbar button").addClass("btn-outline-dark");
-            $(this).removeClass("btn-outline-dark");
-            $(this).addClass("btn-outline-primary");
+            $(".navbar button").removeClass("btn-primary");
+            $(".navbar button").addClass("btn-dark");
+            $(this).removeClass("btn-dark");
+            $(this).addClass("btn-primary");
             menu = $(this).data("menu");
             console.log("Menu yang dipilih: " + menu);
             CheckRoleAndDisplayData(selectedRole, menu)
