@@ -12,9 +12,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
 
-def createDebt(creditorId,amount,description,estimatedReturnDate):
-    result = debt.createDebt(creditorId,amount,description,estimatedReturnDate)
-    return result
+
 
 def createPayment(file,creditorId,amount):
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")

@@ -26,21 +26,6 @@ var debtorProfileHtml = `
 
 <div>
 <h5 class="mx-2 mb-3">your profile</h5>
-<div class="row">
-    <div class="col">
-        <div class="card">
-            <div class="card-header">
-                <span class="card-title">total debt</span>
-            </div>
-            <div class="card-body">
-                <p class="card-text">Rp 120.000</p>
-            </div>
-        </div>
-    </div>
-    <div class="col">
-        
-    </div>
-</div>
 <div>
     <form>
         <div class="mb-3">

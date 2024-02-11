@@ -1,6 +1,7 @@
 var creditorReceivablesHtml = `
 <div>
-    <h5 class="mx-2 mb-3">your debts</h5>
+    <h5 class="mx-2 mb-3">your receivable</h5>
+    <p class="mx-2 mb-3">the amount of money that an individual has not yet received from another party who has an obligation to pay.</p>
     <div id="creditorReceivablesContainer">
         <!-- Your card content goes here -->
     </div>

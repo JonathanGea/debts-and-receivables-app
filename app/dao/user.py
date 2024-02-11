@@ -10,7 +10,7 @@ def getUsers():
             select 
                 id, name, email, unique_code
             from 
-                "debt"."user" u
+                "debts-and-receivables-app"."users" u
             order by id;
             """
         data = fetchesQuery(query)
@@ -25,7 +25,7 @@ def getUserByEmail(email):
             select 
                 id, "name", email,"password", unique_code 
             from 
-                "debt"."user"
+                "debts-and-receivables-app"."users"
             where email = %(email)s;
             """
         parameter = {'email': email}
@@ -43,7 +43,7 @@ def getUserById(id):
             select 
                 id, name, email, password, unique_code
             from 
-                debt.user 
+                 "debts-and-receivables-app"."users" 
             where id = %(id)s;
             """
         parameter = {'id': id}
@@ -61,7 +61,7 @@ def getUserByUniqueCode(uniqueCode):
             select
                 id, name, email 
             from
-                debt."user" u
+                 "debts-and-receivables-app"."users"
             where
                 unique_code = %(uniqueCode)s;
             """
@@ -77,7 +77,7 @@ def getUserByUniqueCode(uniqueCode):
 def createUsersDao(name, email, password):
     try:
         query = """
-            INSERT INTO "debt"."user" (name, email, password)
+            INSERT INTO "debts-and-receivables-app"."users" (name, email, password)
             VALUES
             (%(name)s, %(email)s, %(password)s);
         """

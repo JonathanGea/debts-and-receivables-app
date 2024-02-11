@@ -30,7 +30,7 @@ $("#submitApplyFormLoanButton").click(function () {
         showLoading()
 
         console.log("creditorId", creditorId, "amount", amount, "description", description, estimatedReturnDate)
-        createDebt(creditorId, amount, description, estimatedReturnDate)
+        createTransaction(creditorId, amount, description, estimatedReturnDate)
         $('#applyLoanModal').modal('hide')
         closeModal('applyLoanModal')
         getLoansAndDisplayInCard()
@@ -39,63 +39,6 @@ $("#submitApplyFormLoanButton").click(function () {
 
 })
 
-// function getLoansAndDisplayInTable() {
-//     $.ajax({
-//         url: getDebtsByCreditorUrl,
-//         type: "GET",
-//         dataType: "json",
-//         success: function (result) {
-//             var data = result.data
-//             console.log(data)
-//             function appendRows() {
-//                 var tbody = $('#creditors_table tbody');
-//                 tbody.empty();
-
-//                 data.forEach(function (debt, index) {
-//                     var formattedAmount = formatCurrencyIDR(debt.total_amount);
-
-//                     var row = `
-//                             <tr>
-//                                 <th scope="row">${index + 1}</th>
-//                                 <td>${debt.creditor}</td>
-//                                 <td>${formattedAmount}</td>
-//                                 <td>
-//                                     <button type="button" class="btn btn-info btn-sm detailButton" 
-//                                     id="detailButton" onclick="x('${debt.creditorId}')"
-//                                     data-creditorIdd="${debt.creditorId}" 
-//                                     data-totalAmount="${formattedAmount}"
-//                                     >
-//                                         Detail
-//                                     </button>
-//                                     <button 
-//                                         type="button" class="btn btn-success btn-sm openPayDebtModalButton" 
-//                                         id="openPayDebtModalButton" 
-//                                         data-bs-toggle="modal"
-//                                         data-bs-target="#payDebtModal"
-//                                         data-totalAmount="${formattedAmount}"
-//                                         data-creditorId="${debt.creditorId}"
-//                                         data-creditorName="${debt.creditor}"
-//                                     >
-//                                         Pay
-//                                     </button>
-//                                 </td>
-//                             </tr>
-//                         `;
-//                     tbody.append(row);
-//                 });
-
-//             }
-//             appendRows();
-//             hideLoading()
-
-//         },
-//         error: function (xhr, status, error) {
-//             console.log("Error:", error);
-//             showAlert('data is not displayed, the server is having problems.', 'error');
-
-//         }
-//     })
-// }
 function getLoansAndDisplayInCard() {
     $.ajax({
         url: getDebtsByCreditorUrl,
@@ -121,19 +64,18 @@ function getLoansAndDisplayInCard() {
                         var cardItem = `
                         <div class="card m-2">
                             <div class="row m-1">
-                                <div class="col-8">
+                                <div class="col-7">
                                     <label class="mb-1 fw-bold">${debt.creditor}</label>
                                     <p class="text-muted">${formattedAmount}</p>
                                 </div>
-                                <div class="col-4 text-end">
+                                <div class="col-5 text-end">
                                     <button type="button" class="btn btn-success btn-lg openPayDebtModalButton mt-2"
                                         id="openPayDebtModalButton" 
                                         data-bs-toggle="modal"
                                         data-bs-target="#payDebtModal"
                                         data-totalAmount="${formattedAmount}"
                                         data-creditorId="${debt.creditorId}"
-                                        data-creditorName="${debt.creditor}">💵
-                                        Pay
+                                        data-creditorName="${debt.creditor}">💵 Pay
                                     </button>
                                 </div>
                             </div>
@@ -277,9 +219,9 @@ function maskWord(word) {
     }
 }
 
-function createDebt(creditorId, amount, description, estimatedReturnDate) {
+function createTransaction(creditorId, amount, description, estimatedReturnDate) {
     $.ajax({
-        url: createDebtUrl,
+        url: createTransactionUrl,
         type: "POST",
         dataType: "json",
         data: {

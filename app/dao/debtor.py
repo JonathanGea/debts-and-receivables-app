@@ -8,17 +8,15 @@ def getDebts():
         SELECT
             creditor.id AS id,
             creditor.name AS creditor,
-            SUM(debt.amount) AS total_amount
+            transactions.amount AS amount
         FROM
-            debt.debt AS debt
+            "debts-and-receivables-app".transactions AS transactions
         JOIN
-            debt."user" AS creditor ON debt.creditor_id = creditor.id
+            "debts-and-receivables-app".users AS creditor ON transactions.creditor_id = creditor.id
         WHERE
-            debt.debtor_id = %(debtor_id)s 
-            AND debt.status = 'unpaid'
-        GROUP BY
-            creditor.id;
-            """
+            transactions.debtor_id = %(debtor_id)s 
+            AND transactions.status = 'unpaid'
+        """
         parameter = {'debtor_id': current_user.id}
         app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
 
@@ -32,21 +30,17 @@ def getDebtorOrders():
     try:
         query = """
         SELECT
-            debt.creditor_id AS id,
+            creditor.id AS id,
             creditor.name AS creditor,
-            SUM(CASE WHEN debt.status = 'submitted' OR debt.status = 'Paid' THEN debt.amount ELSE 0 END) AS total_amount,
-            debt.status
+            transactions.amount AS amount,
+            transactions.status
         FROM
-            debt.debt as debt
+            "debts-and-receivables-app".transactions AS transactions
         JOIN
-            debt."user" AS creditor ON debt.creditor_id = creditor.id
-        where
-            debt.debtor_id = %(debtor_id)s  and
-            debt.status IN ('submitted', 'awaiting creditor approval')
-        GROUP BY
-            debt.creditor_id,
-            creditor.name,
-            debt.status;
+            "debts-and-receivables-app".users AS creditor ON transactions.creditor_id = creditor.id
+        WHERE
+            transactions.debtor_id = %(debtor_id)s and
+            transactions.status IN ('submitted', 'awaiting creditor approval')
 
             """
         parameter = {'debtor_id': current_user.id}
@@ -55,5 +49,29 @@ def getDebtorOrders():
         result = fetchesQuery(query,parameter)
         return result
     except Exception as e:
-        app.logger.error(f"error in getDebts: {e}")
+        app.logger.error(f"error in getDebtorOrders: {e}")
+        return False
+    
+def createTransaction(creditorId,amount,description,estimatedReturnDate):
+    try:
+        query = """
+            INSERT INTO "debts-and-receivables-app".transactions 
+                (creditor_id, debtor_id, amount, description, estimate_return_at)
+            VALUES 
+                (%(creditorId)s,  %(current_user)s, %(amount)s, %(description)s, %(estimatedReturnDate)s);
+            """
+        parameters = {
+            'creditorId': creditorId,
+            'current_user': current_user.id,
+            'amount': amount,
+            'description': description,
+            'estimatedReturnDate': estimatedReturnDate
+        }
+        app.logger.info(f'executing SQL query: {query}, Parameters: {parameters}')
+        result = executeQuery(query,parameters)
+        app.logger.info(f'result: {result}')
+
+        return result
+    except Exception as e:
+        print(f"Error in getcreditorLoans: {e}")
         return False

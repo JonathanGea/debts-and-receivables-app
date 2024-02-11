@@ -7,17 +7,15 @@ def getCreditorReceivables():
         query = """
         SELECT
             debtor.id AS id,
-            debtor.name AS debtor,
-            SUM(debt.amount) AS total_amount
+            debtor.name AS creditor,
+            transactions.amount AS amount
         FROM
-            debt.debt AS debt
+            "debts-and-receivables-app".transactions AS transactions
         JOIN
-            debt."user" AS debtor ON debt.debtor_id = debtor.id
+            "debts-and-receivables-app".users AS debtor ON transactions.debtor_id = debtor.id
         WHERE
-            debt.creditor_id = %(creditor_id)s 
-            AND debt.status = 'unpaid'
-        GROUP BY
-            debtor.id;
+            transactions.debtor_id = %(creditor_id)s  
+            AND transactions.status = 'unpaid'
             """
         parameter = {'creditor_id': current_user.id}
         app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
@@ -34,19 +32,15 @@ def getCreditorOrders():
         SELECT
             debtor.id AS id,
             debtor.name AS debtor,
-            SUM(debt.amount) AS total_amount,
-            debt.status
+            transactions.amount AS amount,
+            transactions.status
         FROM
-            debt.debt AS debt
+            "debts-and-receivables-app".transactions AS transactions
         JOIN
-            debt."user" AS debtor ON debt.debtor_id = debtor.id
+            "debts-and-receivables-app".users AS debtor ON transactions.debtor_id = debtor.id
         WHERE
-            debt.creditor_id = %(creditor_id)s and
-            debt.status IN ('submitted', 'awaiting creditor approval')
-        GROUP BY
-            debtor.id,
-            debtor.name,
-            debt.status;
+            transactions.creditor_id = %(creditor_id)s and
+            transactions.status IN ('submitted', 'awaiting creditor approval')
             """
         parameter = {'creditor_id': current_user.id}
         app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')

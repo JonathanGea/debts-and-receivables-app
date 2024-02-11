@@ -66,29 +66,7 @@ def getDebt():
         print(f"Error in getcreditorLoans: {e}")
         return False
     
-def createDebt(creditorId,amount,description,estimatedReturnDate):
-    try:
-        query = """
-            INSERT INTO debt.debt 
-                (creditor_id, debtor_id, amount, description, estimated_return_date, status)
-            VALUES 
-                (%(creditorId)s,  %(current_user)s, %(amount)s, %(description)s, %(estimatedReturnDate)s,'submitted');
-            """
-        parameters = {
-            'creditorId': creditorId,
-            'current_user': current_user.id,
-            'amount': amount,
-            'description': description,
-            'estimatedReturnDate': estimatedReturnDate
-        }
-        app.logger.info(f'executing SQL query: {query}, Parameters: {parameters}')
-        result = executeQuery(query,parameters)
-        app.logger.info(f'result: {result}')
 
-        return result
-    except Exception as e:
-        print(f"Error in getcreditorLoans: {e}")
-        return False
 
 @log_function_execution
 def createPayment(creditorId,amount,payment_receipt_filename):

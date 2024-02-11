@@ -31,3 +31,18 @@ def getDebtorOrders():
         print("Error:", str(e))
         
         return jsonify({"message": "Failewd to retrieve debtor orders"}), 500
+    
+@app.route("/api/debt", methods=["POST"])
+def createTransaction():
+    try:
+        amount = request.form['amount']
+        creditorId = request.form['creditorId']
+        description = request.form['description']
+        estimatedReturnDate = request.form['estimatedReturnDate']
+
+        if debtor.createTransaction(creditorId,amount,description,estimatedReturnDate) is True :
+            return jsonify({"message": "ok"}), 200
+        return jsonify({"message": "failed"}), 400
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"message": "Failed to create user"}), 500

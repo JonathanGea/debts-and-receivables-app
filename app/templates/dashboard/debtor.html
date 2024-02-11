@@ -226,7 +226,7 @@
                 var description = $("#description").val();
                 var estimatedReturnDate = $("#estimatedReturnDate").val();
 
-                createDebt(creditorId, amount, description, estimatedReturnDate)
+                createTransaction(creditorId, amount, description, estimatedReturnDate)
                 $('#applyLoanModal').modal('hide')
                 closeModal('applyLoanModal')
                 getLoansAndDisplayInCard()
@@ -276,9 +276,9 @@
 
 
 
-            function createDebt(creditorId, amount, description, estimatedReturnDate) {
+            function createTransaction(creditorId, amount, description, estimatedReturnDate) {
                 $.ajax({
-                    url: "{{ url_for('createDebt') }}",
+                    url: "{{ url_for('createTransaction') }}",
                     type: "POST",
                     dataType: "json",
                     data: {

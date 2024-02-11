@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Dashboard</title>
+    <title>debts and receivables app</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.7.1.js"
@@ -47,51 +47,54 @@
         <br>
         <br>
         <br>
-        <nav class="navbar fixed-bottom navbar-light bg-light justify-content-center">
-            <div class="nav-item text-center mx-2">
-                <button class="btn btn-primary" data-menu="home">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="bi bi-house-fill" style="font-size: 1em;"></i>
-                        <span>home</span>
-                    </div>
-                </button>
-            </div>
-            <div class="nav-item text-center mx-2">
-                <button class="btn btn-dark" data-menu="order">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="bi bi-cart-fill" style="font-size: 1em;"></i>
-                        <span>order</span>
-                    </div>
-                </button>
-            </div>
-            <div class="nav-item text-center mx-2">
-                <button class="btn btn-dark flex-column align-items-center" data-menu="apply"
-                    id="openApplyForALoanModalButton">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class=""></i>
-                        <i class="bi bi-plus-circle-fill" style="font-size: 1em;"></i>
-                        <span>apply debts</span>
-                    </div>
-                </button>
-            </div>
+        <div class="container-md fixed-bottom">
 
-            <div class="nav-item text-center mx-2">
-                <button class="btn btn-dark" data-menu="history">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="bi bi-clock-fill" style="font-size: 1em;"></i>
-                        <span>history</span>
-                    </div>
-                </button>
-            </div>
-            <div class="nav-item text-center mx-2">
-                <button class="btn btn-outline-dark" data-menu="profile">
-                    <div class="d-flex flex-column align-items-center">
-                        <i class="bi bi-person-fill" style="font-size: 1em;"></i>
-                        <span>profile</span>
-                    </div>
-                </button>
-            </div>
-        </nav>
+            <nav class="navbar navbar-light bg-light">
+                <div class="col nav-item text-center">
+                    <button class="btn btn-primary" data-menu="home">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            99+
+                            <span class="visually-hidden">unread messages</span>
+                          </span>
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="bi bi-house" style="font-size: 1em;"></i>
+                        </div>
+                    </button>
+                </div>
+                <div class="col nav-item text-center">
+                    <button class="btn btn-light" data-menu="order">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="bi bi-arrow-left-right" style="font-size: 1em;"></i>
+                        </div>
+                    </button>
+                </div>
+                <div class="col nav-item text-center">
+                    <button class="btn btn-light flex-column align-items-center" data-menu="apply"
+                        id="openApplyForALoanModalButton">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class=""></i>
+                            <i class="bi bi-plus-circle" style="font-size: 1em;"></i>
+                        </div>
+                    </button>
+                </div>
+
+                <div class="col nav-item text-center">
+                    <button class="btn btn-light" data-menu="history">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="bi bi-clock" style="font-size: 1em;"></i>
+                        </div>
+                    </button>
+                </div>
+                <div class="col nav-item text-center">
+                    <button class="btn btn-light" data-menu="profile">
+                        <div class="d-flex flex-column align-items-center">
+                            <i class="bi bi-person" style="font-size: 1em;"></i>
+                        </div>
+                    </button>
+                </div>
+            </nav>
+        </div>
+
 
 
 
@@ -136,9 +139,9 @@
             'email': '{{ currentUser.email }}'
         };
 
-        console.log (currentUser)
+        console.log(currentUser)
 
-        
+
         function showAlert(message, alertType) {
             var alertClass;
             var alertIcon;

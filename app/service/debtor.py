@@ -12,9 +12,10 @@ import app.dao.debtor as debtor
 
 
 """
-getDebt
-getDebtorOrder 
+getDebt ✅
+getDebtorOrder  ✅
 getDebtorHistory 
+create transaktion ✅
 """
 
 def getDebts():
@@ -42,3 +43,7 @@ def getDebtorOrders():
         }
         debtDicts.append(debtDict)
     return debtDicts
+
+def createTransaction(creditorId,amount,description,estimatedReturnDate):
+    result = debtor.createTransaction(creditorId,amount,description,estimatedReturnDate)
+    return result
