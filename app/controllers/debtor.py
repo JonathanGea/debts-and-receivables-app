@@ -2,14 +2,6 @@ from app import app
 from flask import jsonify,request
 import app.service.debtor as debtor
 
-"""
-
-getDebts
-getDebt => masih dipertimbangkan
-getDebtorOrder 
-getDebtorHistory 
-"""
-
 @app.route("/api/debtor/debts", methods=["GET"])
 def getDebts():
     try:
@@ -43,7 +35,7 @@ def getDebtorHistorys():
         
         return jsonify({"message": "Failewd to retrieve debtor Historys"}), 500
     
-@app.route("/api/debt", methods=["POST"])
+@app.route("/api/debtor/create-transaction", methods=["POST"])
 def createTransaction():
     try:
         amount = request.form['amount']
@@ -57,3 +49,15 @@ def createTransaction():
     except Exception as e:
         print("Error:", str(e))
         return jsonify({"message": "Failed to create user"}), 500
+    
+@app.route("/api/debtor/debtor-pay-debt", methods=["POST"])
+def debtorPayDebt():
+    try:
+        transactionsId = request.form['transactionsId']
+        file = request.files['file']
+        debtor.debtorPayDebt(file,transactionsId)
+        return jsonify({"message": "ok"}), 200
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"message": "Failed to create user"}), 500
+    

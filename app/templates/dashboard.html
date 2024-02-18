@@ -80,6 +80,7 @@
                     <label for="payDebtAmount" class="form-label fw-bold">amount</label>
                     <input type="text" class="form-control" id="payDebtAmount" readonly>
                     <input type="hidden" class="form-control" id="payDebtCreditorId">
+                    <input type="hidden" class="form-control" id="payDebtTransactionsId">
                 </div>
                 <div class="mb-3">
                     <label for="payDebtCreditorName" class="form-label fw-bold">creditor name</label>
@@ -153,7 +154,7 @@
     var getCreditorsUrl = "{{ url_for('getUsers') }}";
     var createTransactionUrl = "{{ url_for('createTransaction') }}";
     var createMoneyTransferToDebtorUrl = "{{ url_for('createMoneyTransferToDebtor') }}";
-    var createPaymentUrl = "{{ url_for('createPayment') }}";
+    var debtorPayDebtUrl = "{{ url_for('debtorPayDebt') }}";
     var tableContainer = $('#tableContainer')
     var getCreditorByUniqueCodeUrl = "{{ url_for('getUserByUniquecode') }}";
 
@@ -259,15 +260,7 @@
             showModal($('#applyLoanModal'))
         })
 
-        $(document).on("click", ".openPayDebtModalButton", function () {
-            var totalAmount = $(this).data('totalamount');
-            var creditorId = $(this).data('creditorid');
-            var creditorName = $(this).data('creditorname');
-            $("#payDebtAmount").val(totalAmount);
-            $("#payDebtCreditorId").val(creditorId);
-            $("#payDebtCreditorName").val(creditorName);
 
-        });
 
         $(document).on("click", ".openUploadreceiptofMoneyTransferModalButton", function () {
             var totalAmount = $(this).data('totalamount');

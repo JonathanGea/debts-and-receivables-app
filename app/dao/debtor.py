@@ -8,7 +8,8 @@ def getDebts():
         SELECT
             creditor.id AS id,
             creditor.name AS creditor,
-            transactions.amount AS amount
+            transactions.amount AS amount,
+            transactions.id
         FROM
             "debts-and-receivables-app".transactions AS transactions
         JOIN
@@ -98,4 +99,23 @@ def createTransaction(creditorId,amount,description,estimatedReturnDate):
         return result
     except Exception as e:
         print(f"Error in getcreditorLoans: {e}")
+        return False
+    
+def changeTransaksiStatusToWaitingforPaymentApproval(transactionsId):
+    try:
+        query = """
+        UPDATE 
+            "debts-and-receivables-app".transactions 
+        SET 
+            status = 'awaiting creditor approval',
+            creditor_send_money_at = CURRENT_TIMESTAMP
+        WHERE 
+            id = %(transactionsId)s
+            """
+        parameter = {'transactionsId': transactionsId}
+        app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
+        result = executeQuery(query,parameter)
+        return result
+    except Exception as e:
+        app.logger.error(f"error in changeTransaksiStatusToWaitingforPaymentApproval: {e}")
         return False

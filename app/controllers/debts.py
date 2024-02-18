@@ -3,8 +3,6 @@ from flask import jsonify,request
 import app.service.creditor as creditor
 import app.service.debts as debts
 
-    
-
 
 @app.route("/api/payment", methods=["POST"])
 def createPayment():

@@ -1,3 +1,34 @@
+$('#payDebtModal').on('hidden.bs.modal', function (e) {
+    $("#proofPaymentFile").val('');
+    $("#proofPaymentFile").removeClass("is-invalid is-valid");
+
+});
+
+$(document).on("click", ".openPayDebtModalButton", function () {
+    var totalAmount = $(this).data('totalamount');
+    var creditorId = $(this).data('creditorid');
+    var creditorName = $(this).data('creditorname');
+    var transactionsId = $(this).data('transactionsid');
+    $("#payDebtAmount").val(totalAmount);
+    $("#payDebtCreditorId").val(creditorId);
+    $("#payDebtCreditorName").val(creditorName);
+    $("#payDebtTransactionsId").val(transactionsId);
+
+});
+
+$("#submitpayDebtFormButton").click(function () {
+    var proofPaymentFile = $("#proofPaymentFile")[0].files[0];
+    var transactionsId = $("#payDebtTransactionsId").val();
+
+    var formData = new FormData();
+    formData.append('file', proofPaymentFile);
+    formData.append('transactionsId', transactionsId);
+    debtorPayDebt(formData)
+    getLoansAndDisplayInCard()
+    hideLoading()
+
+});
+
 $('#applyLoanModal').on('hidden.bs.modal', function (e) {
     $('#amount').val('');
     $('#searchUniqueCodeInput').val('');
@@ -7,8 +38,6 @@ $('#applyLoanModal').on('hidden.bs.modal', function (e) {
     $("#amount, #searchUniqueCodeInput, #description, #creditorName, #estimatedReturnDate ").removeClass("is-invalid is-valid");
 
 });
-
-
 
 
 $('#amount').on('input', function () {
@@ -113,6 +142,7 @@ function getLoansAndDisplayInCard() {
                                         data-bs-target="#payDebtModal"
                                         data-totalAmount="${formattedAmount}"
                                         data-creditorId="${debt.creditorId}"
+                                        data-transactionsid="${debt.id}"
                                         data-creditorName="${debt.creditor}">💵 Pay
                                     </button>
                                 </div>
@@ -334,27 +364,12 @@ function createTransaction(creditorId, amount, description, estimatedReturnDate)
 }
 
 
-$("#submitpayDebtFormButton").click(function () {
-    var proofPaymentFile = $("#proofPaymentFile")[0].files[0];
-    var creditorId = $("#payDebtCreditorId").val();
-    var amount = $("#payDebtAmount").val();
-    var payment_receipt_filename = proofPaymentFile ? proofPaymentFile.name : '';
 
-    var formData = new FormData();
-    formData.append('file', proofPaymentFile);
-    formData.append('creditorId', creditorId);
-    formData.append('amount', amount);
-    formData.append('payment_receipt_filename', payment_receipt_filename);
-    createPayment(formData)
-    getLoansAndDisplayInCard()
-    hideLoading()
 
-});
-
-function createPayment(formData) {
+function debtorPayDebt(formData) {
     showLoading()
     $.ajax({
-        url: createPaymentUrl,
+        url: debtorPayDebtUrl,
         type: 'POST',
         data: formData,
         processData: false,
@@ -363,8 +378,6 @@ function createPayment(formData) {
             console.log('Upload successful:', response);
             $('#payDebtModal').modal('hide')
             closeModal('payDebtModal')
-
-
         },
         error: function (error) {
             console.error('Error uploading file:', error);
