@@ -14,9 +14,6 @@ def getCreditorReceivables():
         
         return jsonify({"message": "Failed to retrieve creditor receivables"}), 500
     
-
-# getCreditorOrders
-    
 @app.route("/api/creditor/orders", methods=["GET"])
 def getCreditorOrders():
     try:
@@ -27,3 +24,14 @@ def getCreditorOrders():
         print("Error:", str(e))
         
         return jsonify({"message": "Failed to retrieve debtor orders"}), 500
+    
+@app.route("/api/creditor/createMoneyTransferToDebtor", methods=["POST"])
+def createMoneyTransferToDebtor():
+    try:
+        transactionsId = request.form['transactionsId']
+        file = request.files['file']
+        creditor.createMoneyTransferToDebtor(file,transactionsId)
+        return jsonify({"message": "ok"}), 200
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"message": "Failed"}), 500

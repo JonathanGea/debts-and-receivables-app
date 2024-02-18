@@ -33,7 +33,8 @@ def getCreditorOrders():
             debtor.id AS id,
             debtor.name AS debtor,
             transactions.amount AS amount,
-            transactions.status
+            transactions.status,
+            transactions.id
         FROM
             "debts-and-receivables-app".transactions AS transactions
         JOIN
@@ -49,4 +50,23 @@ def getCreditorOrders():
         return result
     except Exception as e:
         app.logger.error(f"error in getCreditorReceivables: {e}")
+        return False
+    
+def changeTransaksiStatusToUnpaid(transactionsId):
+    try:
+        query = """
+        UPDATE 
+            "debts-and-receivables-app".transactions 
+        SET 
+            status = 'unpaid',
+            creditor_send_money_at = CURRENT_TIMESTAMP
+        WHERE 
+            id = %(transactionsId)s
+            """
+        parameter = {'transactionsId': transactionsId}
+        app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
+        result = executeQuery(query,parameter)
+        return result
+    except Exception as e:
+        app.logger.error(f"error in changeTransaksiStatusToUnpaid: {e}")
         return False

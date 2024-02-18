@@ -1,5 +1,17 @@
-import app
+from app import app
 import app.dao.creditor as creditor
+import app.service.debtor as debtor 
+
+from datetime import datetime
+from decimal import Decimal
+import os
+
+UPLOAD_FOLDER = 'app/static/uploads'
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
 
 def getcreditorLoans():
     result = creditor.getcreditorLoans()
@@ -37,7 +49,16 @@ def getCreditorOrders():
             'debtorId': row[0],
             'debtor': row[1],
             'total_amount': float(row[2]),
-            'status': row[3]
+            'status': row[3],
+            'id': row[4]
         }
         debtDicts.append(debtDict)
     return debtDicts
+
+def createMoneyTransferToDebtor(file,transactionsId):
+    timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+    filename = f"proof_money_tranfer_to_debtor_{timestamp}.jpg"
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    print ("transactionsId : ", transactionsId)
+    result = creditor.changeTransaksiStatusToUnpaid(transactionsId)    
+    return result

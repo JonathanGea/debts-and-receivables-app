@@ -9,6 +9,8 @@ $('#applyLoanModal').on('hidden.bs.modal', function (e) {
 });
 
 
+
+
 $('#amount').on('input', function () {
     let inputValue = $(this).val().replace(/[^\d]/g, '');
     let formattedValue = Number(inputValue).toLocaleString('id-ID');

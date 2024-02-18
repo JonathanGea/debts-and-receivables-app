@@ -114,25 +114,28 @@
                     <label for="uploadReceiptOfMoneyTransferAmount" class="form-label fw-bold">amount</label>
                     <input type="text" class="form-control" id="uploadReceiptOfMoneyTransferAmount" readonly>
                     <input type="hidden" class="form-control" id="uploadReceiptOfMoneyTransferDebtorId">
+                    <input type="hidden" class="form-control" id="transactionsId">
+
                 </div>
                 <div class="mb-3">
                     <label for="uploadReceiptOfMoneyTransferDebtorName" class="form-label fw-bold">debtor name</label>
                     <input type="text" class="form-control" id="uploadReceiptOfMoneyTransferDebtorName" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="proofPaymentFile" class="form-label fw-bold">upload receipt of payment</label>
-                    <input class="form-control" type="file" id="proofPaymentFile">
+                    <label for="proofMoneyTransferFile" class="form-label fw-bold">upload receipt of MoneyTransfer</label>
+                    <input class="form-control" type="file" id="proofMoneyTransferFile">
                 </div>
             </div>
 
 
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="submitpayDebtFormButton">Submit</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="submitMoneyTransferButton">Kirim</button>
             </div>
         </div>
     </div>
 </div>
+
 
 
 {% endblock %}
@@ -149,6 +152,7 @@
     var getCreditorOrdersUrl = "{{ url_for('getCreditorOrders') }}";
     var getCreditorsUrl = "{{ url_for('getUsers') }}";
     var createTransactionUrl = "{{ url_for('createTransaction') }}";
+    var createMoneyTransferToDebtorUrl = "{{ url_for('createMoneyTransferToDebtor') }}";
     var createPaymentUrl = "{{ url_for('createPayment') }}";
     var tableContainer = $('#tableContainer')
     var getCreditorByUniqueCodeUrl = "{{ url_for('getUserByUniquecode') }}";
@@ -269,10 +273,12 @@
             var totalAmount = $(this).data('totalamount');
             var debtorId = $(this).data('debtorid');
             var debtorName = $(this).data('debtorname');
-            console.log(totalAmount,debtorId,debtorName)
+            var transactionsId = $(this).data('transactionsid');
+            console.log(totalAmount,debtorId,debtorName, transactionsId)
             $("#uploadReceiptOfMoneyTransferAmount").val(totalAmount);
             $("#uploadReceiptOfMoneyTransferDebtorId").val(debtorId);
             $("#uploadReceiptOfMoneyTransferDebtorName").val(debtorName);
+            $("#transactionsId").val(transactionsId);
 
         });
 

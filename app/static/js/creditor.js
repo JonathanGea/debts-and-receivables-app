@@ -1,4 +1,59 @@
+$('#uploadReceiptOfMoneyTransferModal').on('hidden.bs.modal', function (e) {
+    $("#proofMoneyTransferFile").val('');
+    $("#proofMoneyTransferFile").removeClass("is-invalid is-valid");
 
+});
+
+$("#submitMoneyTransferButton").click(function () {
+
+    var transactionsId = $("#transactionsId").val();
+    var proofMoneyTransferFile = $("#proofMoneyTransferFile")[0].files[0];
+
+   
+    $("#proofMoneyTransferFile").removeClass("is-invalid is-valid");
+    $(".amount-error-message, .unique-code-error-message").remove();
+
+    var isValid = true;
+
+    // Validate amount
+    if (!proofMoneyTransferFile) {
+        $("#proofMoneyTransferFile").addClass("is-invalid");
+        $("#proofMoneyTransferFile").after('<div class="invalid-feedback amount-error-message">Receipt of transfer money file is required.</div>');
+        isValid = false;
+    }
+    if (isValid) {
+        var formData = new FormData();
+        formData.append('transactionsId', transactionsId);
+        formData.append('file', proofMoneyTransferFile);
+        console.log("transactionsId : ", transactionsId)
+        createMoneyTransferToDebtor(formData)
+        $('#uploadReceiptOfMoneyTransferModal').modal('hide')
+        closeModal('uploadReceiptOfMoneyTransferModal')
+        getCreditorOrders()
+        hideLoading()
+    }
+
+
+})
+function createMoneyTransferToDebtor(data) {
+    showLoading()
+    $.ajax({
+        url: createMoneyTransferToDebtorUrl,
+        type: 'POST',
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+            console.log('Upload successful:', response);
+            $('#uploadReceiptOfMoneyTransferModal').modal('hide')
+            closeModal('uploadReceiptOfMoneyTransferModal')
+
+        },
+        error: function (error) {
+            console.error('Error uploading file:', error);
+        }
+    });
+}
 function getCreditorReceivables() {
     $.ajax({
         url: getCreditorReceivablesUrl,
@@ -86,6 +141,7 @@ function getCreditorOrders() {
                                     data-bs-target="#uploadReceiptOfMoneyTransferModal"
                                     data-totalAmount="${formattedAmount}"
                                     data-debtorId="${order.debtorId}"
+                                    data-transactionsId="${order.id}"
                                     data-debtorName="${order.debtor}">💵 upload receipt 
                                 </button>
                                 </div>
