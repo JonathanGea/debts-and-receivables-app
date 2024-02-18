@@ -20,6 +20,18 @@ var debtorOrdersHtml = `
     <div>
 </div>
 `
+var debtoHistorysHtml = `   
+<div>
+    <h5 class="mx-2 mb-3">your history's</h5>
+    <div id="debtorHistorysContainer">
+        <!-- Your card content goes here -->
+    </div>
+</div>
+<div class="accordion accordion-flush" id="accordionFlushExample">
+    <div id="debtoHistorysAccordionContainer">
+    <div>
+</div>
+`
 
 
 var debtorProfileHtml = ` 

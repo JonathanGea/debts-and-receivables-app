@@ -44,6 +44,19 @@ def getDebtorOrders():
         debtDicts.append(debtDict)
     return debtDicts
 
+def getDebtorHistorys():
+    result = debtor.getDebtorHistorys()
+    debtDicts = []
+    for row in result:
+        debtDict = {
+            'creditorId': row[0],
+            'creditor': row[1],
+            'total_amount': float(row[2]),
+            'status': row[3]
+        }
+        debtDicts.append(debtDict)
+    return debtDicts
+
 def createTransaction(creditorId,amount,description,estimatedReturnDate):
     result = debtor.createTransaction(creditorId,amount,description,estimatedReturnDate)
     return result

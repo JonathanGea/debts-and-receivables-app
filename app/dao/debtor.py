@@ -52,6 +52,30 @@ def getDebtorOrders():
         app.logger.error(f"error in getDebtorOrders: {e}")
         return False
     
+def getDebtorHistorys():
+    try:
+        query = """
+        SELECT
+            creditor.id AS id,
+            creditor.name AS creditor,
+            transactions.amount AS amount,
+            transactions.status
+        FROM
+            "debts-and-receivables-app".transactions AS transactions
+        JOIN
+            "debts-and-receivables-app".users AS creditor ON transactions.creditor_id = creditor.id
+        WHERE
+            transactions.debtor_id = %(debtor_id)s and
+            transactions.status = 'completed'
+            """
+        parameter = {'debtor_id': current_user.id}
+        app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
+
+        result = fetchesQuery(query,parameter)
+        return result
+    except Exception as e:
+        app.logger.error(f"error in getDebtorHistorys: {e}")
+    
 def createTransaction(creditorId,amount,description,estimatedReturnDate):
     try:
         query = """

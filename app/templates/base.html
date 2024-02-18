@@ -13,6 +13,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
     </style>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon/favicon.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/favicon/favicon.png') }}" type="image/png">
+
 </head>
 
 <body>
@@ -52,17 +55,18 @@
             <nav class="navbar navbar-light bg-light">
                 <div class="col nav-item text-center">
                     <button class="btn btn-primary" data-menu="home">
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            99+
-                            <span class="visually-hidden">unread messages</span>
-                          </span>
+
                         <div class="d-flex flex-column align-items-center">
                             <i class="bi bi-house" style="font-size: 1em;"></i>
                         </div>
                     </button>
                 </div>
                 <div class="col nav-item text-center">
-                    <button class="btn btn-light" data-menu="order">
+                    <button class="btn btn-light  position-relative" data-menu="order">
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            2
+                            <span class="visually-hidden">total order</span>
+                        </span>
                         <div class="d-flex flex-column align-items-center">
                             <i class="bi bi-arrow-left-right" style="font-size: 1em;"></i>
                         </div>

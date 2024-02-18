@@ -50,12 +50,12 @@
                 <div class="mb-3">
                     <label for="description" class="form-label fw-bold">description</label>
                     <textarea class="form-control" id="description"
-                        placeholder="write down the purpose of the loan">for education purpose</textarea>
+                        placeholder="write down the purpose of the loan"></textarea>
 
                 </div>
                 <div class="mb-3">
                     <label for="estimatedReturnDate" class="form-label fw-bold">estimated return date</label>
-                    <input type="date" id="estimatedReturnDate" class="form-control" value="2023-12-12"></input>
+                    <input type="date" id="estimatedReturnDate" class="form-control"></input>
 
                 </div>
             </div>
@@ -145,6 +145,7 @@
     var getDebtsByCreditorUrl = "{{ url_for('getDebts') }}";
     var getCreditorReceivablesUrl = "{{ url_for('getCreditorReceivables') }}";
     var getDebtorOrdersUrl = "{{ url_for('getDebtorOrders') }}";
+    var getDebtorHistorysUrl = "{{ url_for('getDebtorHistorys') }}";
     var getCreditorOrdersUrl = "{{ url_for('getCreditorOrders') }}";
     var getCreditorsUrl = "{{ url_for('getUsers') }}";
     var createTransactionUrl = "{{ url_for('createTransaction') }}";
@@ -218,10 +219,10 @@
                 else if (menu == 'apply') {
                     hideLoading()
                 } else {
-                    showAlert('A simple primary alert—check it out!', 'primary');
+                    showLoading()
                     tableContainer.empty()
-
-
+                    tableContainer.html(debtoHistorysHtml)
+                    getDebtorHistorys()
                     hideLoading();
                 }
             } else {

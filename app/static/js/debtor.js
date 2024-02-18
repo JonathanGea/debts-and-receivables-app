@@ -1,4 +1,12 @@
+$('#applyLoanModal').on('hidden.bs.modal', function (e) {
+    $('#amount').val('');
+    $('#searchUniqueCodeInput').val('');
+    $('#creditorName').val('');
+    $('#description').val('');
+    $('#estimatedReturnDate').val('');
+    $("#amount, #searchUniqueCodeInput, #description, #creditorName, #estimatedReturnDate ").removeClass("is-invalid is-valid");
 
+});
 
 
 $('#amount').on('input', function () {
@@ -14,8 +22,8 @@ $("#submitApplyFormLoanButton").click(function () {
     var amount = $("#amount").val().replace(/\./g, '');
     var description = $("#description").val();
     var estimatedReturnDate = $("#estimatedReturnDate").val();
-
-    $("#amount, #searchUniqueCodeInput").removeClass("is-invalid is-valid");
+    console.log(estimatedReturnDate)
+    $("#amount, #searchUniqueCodeInput, #description, #creditorName, #estimatedReturnDate ").removeClass("is-invalid is-valid");
     $(".amount-error-message, .unique-code-error-message").remove();
 
     var isValid = true;
@@ -26,6 +34,34 @@ $("#submitApplyFormLoanButton").click(function () {
         $("#amount").after('<div class="invalid-feedback amount-error-message">amount id required.</div>');
         isValid = false;
     }
+    if (creditorId.length < 1) {
+        $("#creditorName").addClass("is-invalid");
+        $("#creditorName").after('<div class="invalid-feedback amount-error-message">Do a search for the correct creditor name first.</div>');
+        isValid = false;
+    }
+    if (description.length < 1) {
+        $("#description").addClass("is-invalid");
+        $("#description").after('<div class="invalid-feedback amount-error-message">description id required..</div>');
+        isValid = false;
+    }
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    var yyyy = today.getFullYear();
+
+    today = yyyy + '-' + mm + '-' + dd;
+
+
+    if (estimatedReturnDate === '') {
+        $("#estimatedReturnDate").addClass("is-invalid");
+        $("#estimatedReturnDate").after('<div class="invalid-feedback amount-error-message">The date required.</div>');
+        isValid = false;
+    }else if (estimatedReturnDate < today) {
+        $("#estimatedReturnDate").addClass("is-invalid");
+        $("#estimatedReturnDate").after('<div class="invalid-feedback amount-error-message">The date must be greater than today.</div>');
+        isValid = false;
+    }
+
     if (isValid) {
         showLoading()
 
@@ -112,6 +148,56 @@ function getDebtorOrders() {
                     creditorsList.append(`
                         <div class="alert alert-light" role="alert">
                         You have no orders! 😁
+                        </div>
+                    `);
+                } else {
+                    data.forEach(function (debt, index) {
+                        var formattedAmount = formatCurrencyIDR(debt.total_amount);
+
+                        var cardItem = `
+                        <div class="card m-2">
+                            <div class="row m-1">
+                                <div class="col-6">
+                                    <label class="mb-1 fw-bold">${debt.creditor}</label>
+                                    <p class="text-muted">${formattedAmount}</p>
+                                </div>
+                                <div class="col-6 text-end">
+                                <span class="badge ${debt.status === 'submitted' ? 'text-bg-primary' : debt.status === 'awaiting creditor approval' ? 'text-bg-success' : ''}">${debt.status}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                        creditorsList.append(cardItem);
+                    });
+                }
+            }
+
+            appendCards();
+            hideLoading();
+        },
+        error: function (xhr, status, error) {
+            console.log("Error:", error);
+            showAlert('Data is not displayed, the server is having problems.', 'error');
+        }
+    });
+}
+
+function getDebtorHistorys() {
+    $.ajax({
+        url: getDebtorHistorysUrl,
+        type: "GET",
+        dataType: "json",
+        success: function (result) {
+            var data = result.data;
+            console.log(data);
+
+            function appendCards() {
+                var creditorsList = $('#debtorHistorysContainer');
+                creditorsList.empty();
+                if (data.length === 0) {
+                    creditorsList.append(`
+                        <div class="alert alert-light" role="alert">
+                        You have no Historys! 😁
                         </div>
                     `);
                 } else {

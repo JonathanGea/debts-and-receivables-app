@@ -32,6 +32,17 @@ def getDebtorOrders():
         
         return jsonify({"message": "Failewd to retrieve debtor orders"}), 500
     
+@app.route("/api/debtor/historys", methods=["GET"])
+def getDebtorHistorys():
+    try:
+        data = debtor.getDebtorHistorys()
+        
+        return jsonify({"data": data}), 200
+    except Exception as e:
+        print("Error:", str(e))
+        
+        return jsonify({"message": "Failewd to retrieve debtor Historys"}), 500
+    
 @app.route("/api/debt", methods=["POST"])
 def createTransaction():
     try:
