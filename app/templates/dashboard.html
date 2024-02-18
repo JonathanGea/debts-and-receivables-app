@@ -1,0 +1,289 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div id="tableContainer">
+
+</div>
+
+
+
+
+
+
+<!-- Modal applyLoanModal -->
+<div class="modal fade" id="applyLoanModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="applyLoanModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="applyLoanModalLabel">loan application form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="amount" class="form-label fw-bold">amount</label>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Rp</span>
+                        <input type="text" class="form-control" id="amount">
+                        <span class="input-group-text">.00</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="creditor name" class="form-label fw-bold">creditor code</label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="searchUniqueCodeInput"
+                            placeholder="unique code creditor">
+                        <button class="btn btn-outline-secondary" type="button" id="searchButton"> <i
+                                class="bi bi-search"></i> search</button>
+                    </div>
+                    <div class="text-muted">
+                        please ask your creditor for "unique code creditor"
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="creditor name" class="form-label fw-bold">creditor name</label>
+                    <input type="text" class="form-control" id="creditorName" disabled>
+                    <input type="hidden" id="creditorId">
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label fw-bold">description</label>
+                    <textarea class="form-control" id="description"
+                        placeholder="write down the purpose of the loan"></textarea>
+
+                </div>
+                <div class="mb-3">
+                    <label for="estimatedReturnDate" class="form-label fw-bold">estimated return date</label>
+                    <input type="date" id="estimatedReturnDate" class="form-control"></input>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitApplyFormLoanButton">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal payDebtModal -->
+<div class="modal fade" id="payDebtModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="payDebtModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="payDebtModalLabel">loan application form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="payDebtAmount" class="form-label fw-bold">amount</label>
+                    <input type="text" class="form-control" id="payDebtAmount" readonly>
+                    <input type="hidden" class="form-control" id="payDebtCreditorId">
+                </div>
+                <div class="mb-3">
+                    <label for="payDebtCreditorName" class="form-label fw-bold">creditor name</label>
+                    <input type="text" class="form-control" id="payDebtCreditorName" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="proofPaymentFile" class="form-label fw-bold">upload receipt of payment</label>
+                    <input class="form-control" type="file" id="proofPaymentFile">
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="submitpayDebtFormButton">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal upload receipt of money transfer -->
+<div class="modal fade" id="uploadReceiptOfMoneyTransferModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="uploadReceiptOfMoneyTransferModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="uploadReceiptOfMoneyTransferModalLabel">receipt of money transfer form</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="uploadReceiptOfMoneyTransferAmount" class="form-label fw-bold">amount</label>
+                    <input type="text" class="form-control" id="uploadReceiptOfMoneyTransferAmount" readonly>
+                    <input type="hidden" class="form-control" id="uploadReceiptOfMoneyTransferDebtorId">
+                    <input type="hidden" class="form-control" id="transactionsId">
+
+                </div>
+                <div class="mb-3">
+                    <label for="uploadReceiptOfMoneyTransferDebtorName" class="form-label fw-bold">debtor name</label>
+                    <input type="text" class="form-control" id="uploadReceiptOfMoneyTransferDebtorName" readonly>
+                </div>
+                <div class="mb-3">
+                    <label for="proofMoneyTransferFile" class="form-label fw-bold">upload receipt of MoneyTransfer</label>
+                    <input class="form-control" type="file" id="proofMoneyTransferFile">
+                </div>
+            </div>
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="submitMoneyTransferButton">Kirim</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+{% block scripts %}
+<script>
+
+    var getDebtsByCreditorUrl = "{{ url_for('getDebts') }}";
+    var getCreditorReceivablesUrl = "{{ url_for('getCreditorReceivables') }}";
+    var getDebtorOrdersUrl = "{{ url_for('getDebtorOrders') }}";
+    var getDebtorHistorysUrl = "{{ url_for('getDebtorHistorys') }}";
+    var getCreditorOrdersUrl = "{{ url_for('getCreditorOrders') }}";
+    var getCreditorsUrl = "{{ url_for('getUsers') }}";
+    var createTransactionUrl = "{{ url_for('createTransaction') }}";
+    var createMoneyTransferToDebtorUrl = "{{ url_for('createMoneyTransferToDebtor') }}";
+    var createPaymentUrl = "{{ url_for('createPayment') }}";
+    var tableContainer = $('#tableContainer')
+    var getCreditorByUniqueCodeUrl = "{{ url_for('getUserByUniquecode') }}";
+
+
+</script>
+<script src="{{ url_for('static', filename='js/debtor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/creditor.js') }}"></script>
+<script src="{{ url_for('static', filename='js/debtorHtml.js') }}"></script>
+<script src="{{ url_for('static', filename='js/creditorHtml.js') }}"></script>
+<script>
+    var creditor = "creditor"
+    var debtor = "debtor"
+
+    $(document).ready(function () {
+
+        var selectedRole = $('#roleSelect').val()
+        var menu = 'home'
+        CheckRoleAndDisplayData(selectedRole, menu)
+
+        $('#roleSelect').change(function () {
+            showLoading()
+            selectedRole = $(this).val();
+            CheckRoleAndDisplayData(selectedRole, menu)
+
+        });
+        $(".navbar button").on("click", function () {
+            $(".navbar button").removeClass("btn-primary");
+            $(".navbar button").addClass("btn-light");
+            $(this).removeClass("btn-light");
+            $(this).addClass("btn-primary");
+            menu = $(this).data("menu");
+            console.log("Menu yang dipilih: " + menu);
+            CheckRoleAndDisplayData(selectedRole, menu)
+        });
+
+        $("#searchButton").click(function () {
+            showLoading()
+
+            var uniqueCode = $("#searchUniqueCodeInput").val();
+            console.log("click btn \n uniqueCode : ", uniqueCode)
+            getCreditorByUniqueCode(uniqueCode);
+        });
+
+
+        function CheckRoleAndDisplayData(selectedRole, menu) {
+            showLoading()
+            console.log(selectedRole, menu)
+            if (selectedRole == debtor) {
+                if (menu == 'home') {
+                    tableContainer.empty()
+                    tableContainer.html(debtorDebtHtml)
+                    getLoansAndDisplayInCard()
+                    hideLoading()
+                } else if (menu == 'order') {
+                    tableContainer.empty()
+                    showLoading()
+                    tableContainer.html(debtorOrdersHtml)
+                    getDebtorOrders()
+                    hideLoading()
+                }
+                else if (menu == 'profile') {
+                    tableContainer.empty()
+                    showLoading()
+                    tableContainer.html(debtorProfileHtml)
+                    hideLoading()
+                }
+                else if (menu == 'apply') {
+                    hideLoading()
+                } else {
+                    showLoading()
+                    tableContainer.empty()
+                    tableContainer.html(debtoHistorysHtml)
+                    getDebtorHistorys()
+                    hideLoading();
+                }
+            } else {
+                if (menu == 'home') {
+                    tableContainer.empty()
+                    tableContainer.html(creditorReceivablesHtml)
+                    getCreditorReceivables()
+                    hideLoading();
+                } else if (menu == 'profile') {
+                    tableContainer.empty()
+                    showLoading()
+                    tableContainer.html(creditorProfileHtml)
+                    hideLoading()
+                } else if (menu == 'order') {
+                    tableContainer.empty()
+                    showLoading()
+                    tableContainer.html(debtorOrdersHtml)
+                    getCreditorOrders()
+                    hideLoading()
+                } else {
+                    tableContainer.empty()
+                    hideLoading();
+                }
+
+
+            }
+        }
+        $("#openApplyForALoanModalButton").click(function () {
+            showLoading()
+            showModal($('#applyLoanModal'))
+        })
+
+        $(document).on("click", ".openPayDebtModalButton", function () {
+            var totalAmount = $(this).data('totalamount');
+            var creditorId = $(this).data('creditorid');
+            var creditorName = $(this).data('creditorname');
+            $("#payDebtAmount").val(totalAmount);
+            $("#payDebtCreditorId").val(creditorId);
+            $("#payDebtCreditorName").val(creditorName);
+
+        });
+
+        $(document).on("click", ".openUploadreceiptofMoneyTransferModalButton", function () {
+            var totalAmount = $(this).data('totalamount');
+            var debtorId = $(this).data('debtorid');
+            var debtorName = $(this).data('debtorname');
+            var transactionsId = $(this).data('transactionsid');
+            console.log(totalAmount,debtorId,debtorName, transactionsId)
+            $("#uploadReceiptOfMoneyTransferAmount").val(totalAmount);
+            $("#uploadReceiptOfMoneyTransferDebtorId").val(debtorId);
+            $("#uploadReceiptOfMoneyTransferDebtorName").val(debtorName);
+            $("#transactionsId").val(transactionsId);
+
+        });
+
+
+    });
+
+</script>
+{% endblock %}
