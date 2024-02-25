@@ -9,7 +9,7 @@ $("#submitMoneyTransferButton").click(function () {
     var transactionsId = $("#transactionsId").val();
     var proofMoneyTransferFile = $("#proofMoneyTransferFile")[0].files[0];
 
-   
+
     $("#proofMoneyTransferFile").removeClass("is-invalid is-valid");
     $(".amount-error-message, .unique-code-error-message").remove();
 
@@ -35,6 +35,24 @@ $("#submitMoneyTransferButton").click(function () {
 
 
 })
+
+
+function approvedPaymentFromDebtor(data) {
+    showLoading()
+    $.ajax({
+        url: approvedPaymentFromDebtorUrl,
+        type: 'POST',
+        data: data,
+        processData: false,
+        contentType: false,
+        success: function (response) {
+
+        },
+        error: function (error) {
+            console.error('Error uploading file:', error);
+        }
+    });
+}
 function createMoneyTransferToDebtor(data) {
     showLoading()
     $.ajax({
@@ -135,20 +153,76 @@ function getCreditorOrders() {
                                     <p class="text-muted">${formattedAmount}</p>
                                 </div>
                                 <div class="col-6 text-end">
-                                <button type="button" class="btn btn-success btn-sm openUploadreceiptofMoneyTransferModalButton mt-2"
-                                    id="openUploadreceiptofMoneyTransferModalButton" 
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#uploadReceiptOfMoneyTransferModal"
-                                    data-totalAmount="${formattedAmount}"
-                                    data-debtorId="${order.debtorId}"
-                                    data-transactionsId="${order.id}"
-                                    data-debtorName="${order.debtor}">💵 upload receipt 
-                                </button>
+                                    ${order.status === 'submitted' ? `
+                                    <button type="button" class="btn btn-success btn-sm openUploadreceiptofMoneyTransferModalButton mt-2"
+                                        id="openUploadreceiptofMoneyTransferModalButton" 
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#uploadReceiptOfMoneyTransferModal"
+                                        data-totalAmount="${formattedAmount}"
+                                        data-debtorId="${order.debtorId}"
+                                        data-transactionsId="${order.id}"
+                                        data-debtorName="${order.debtor}">💵 Upload Receipt
+                                    </button>` : order.status === 'awaiting creditor approval' ? `
+                                    <button type="button" class="btn btn-primary btn-sm approveButton mt-2"
+                                        id="approveButton"
+                                        data-transactionsId="${order.id}">Approve
+                                    </button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    
+                    `;
+                        debtorsList.append(cardItem);
+                    });
+                }
+            }
+
+            appendCards();
+            hideLoading();
+        },
+        error: function (xhr, status, error) {
+            console.log("Error:", error);
+            showAlert('Data is not displayed, the server is having problems.', 'error');
+        }
+    });
+}
+
+function getCreditorHistorys() {
+    $.ajax({
+        url: getCreditorHistorysUrl,
+        type: "GET",
+        dataType: "json",
+        success: function (result) {
+            var data = result.data;
+            console.log(data);
+
+            function appendCards() {
+                var creditorsList = $('#creditorHistorysContainer');
+                creditorsList.empty();
+                if (data.length === 0) {
+                    creditorsList.append(`
+                        <div class="alert alert-light" role="alert">
+                        You have no Historys! 😁
+                        </div>
+                    `);
+                } else {
+                    data.forEach(function (debt, index) {
+                        var formattedAmount = formatCurrencyIDR(debt.total_amount);
+
+                        var cardItem = `
+                        <div class="card m-2">
+                            <div class="row m-1">
+                                <div class="col-6">
+                                    <label class="mb-1 fw-bold">${debt.debtor}</label>
+                                    <p class="text-muted">${formattedAmount}</p>
+                                </div>
+                                <div class="col-6 text-end">
+                                <span class="badge ${debt.status === 'submitted' ? 'text-bg-primary' : debt.status === 'awaiting creditor approval' ? 'text-bg-success' : ''}">${debt.status}</span>
                                 </div>
                             </div>
                         </div>
                     `;
-                        debtorsList.append(cardItem);
+                        creditorsList.append(cardItem);
                     });
                 }
             }

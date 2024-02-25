@@ -51,6 +51,32 @@ def getCreditorOrders():
     except Exception as e:
         app.logger.error(f"error in getCreditorReceivables: {e}")
         return False
+
+def getCreditorHistorys():
+    try:
+        query = """
+        SELECT
+            debtor.id AS id,
+            debtor.name AS debtor,
+            transactions.amount AS amount,
+            transactions.status,
+            transactions.id
+        FROM
+            "debts-and-receivables-app".transactions AS transactions
+        JOIN
+            "debts-and-receivables-app".users AS debtor ON transactions.debtor_id = debtor.id
+        WHERE
+            transactions.creditor_id = %(creditor_id)s and
+            transactions.status = 'completed'
+            """
+        parameter = {'creditor_id': current_user.id}
+        app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
+
+        result = fetchesQuery(query,parameter)
+        return result
+    except Exception as e:
+        app.logger.error(f"error in getCreditorReceivables: {e}")
+        return False
     
 def changeTransaksiStatusToUnpaid(transactionsId):
     try:
@@ -69,4 +95,23 @@ def changeTransaksiStatusToUnpaid(transactionsId):
         return result
     except Exception as e:
         app.logger.error(f"error in changeTransaksiStatusToUnpaid: {e}")
+        return False
+    
+def changeTransaksiStatusToCompleted(transactionsId):
+    try:
+        query = """
+        UPDATE 
+            "debts-and-receivables-app".transactions 
+        SET 
+            status = 'completed',
+            creditor_approved_payment_at = CURRENT_TIMESTAMP
+        WHERE 
+            id = %(transactionsId)s
+            """
+        parameter = {'transactionsId': transactionsId}
+        app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
+        result = executeQuery(query,parameter)
+        return result
+    except Exception as e:
+        app.logger.error(f"error in changeTransaksiStatusToCompleted: {e}")
         return False

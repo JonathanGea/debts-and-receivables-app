@@ -102,12 +102,13 @@
 </div>
 
 <!-- Modal upload receipt of money transfer -->
-<div class="modal fade" id="uploadReceiptOfMoneyTransferModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-    aria-labelledby="uploadReceiptOfMoneyTransferModalLabel" aria-hidden="true">
+<div class="modal fade" id="uploadReceiptOfMoneyTransferModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="uploadReceiptOfMoneyTransferModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="uploadReceiptOfMoneyTransferModalLabel">receipt of money transfer form</h1>
+                <h1 class="modal-title fs-5" id="uploadReceiptOfMoneyTransferModalLabel">receipt of money transfer form
+                </h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -123,7 +124,8 @@
                     <input type="text" class="form-control" id="uploadReceiptOfMoneyTransferDebtorName" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="proofMoneyTransferFile" class="form-label fw-bold">upload receipt of MoneyTransfer</label>
+                    <label for="proofMoneyTransferFile" class="form-label fw-bold">upload receipt of
+                        MoneyTransfer</label>
                     <input class="form-control" type="file" id="proofMoneyTransferFile">
                 </div>
             </div>
@@ -137,6 +139,25 @@
     </div>
 </div>
 
+<!-- Modal konfirmasi approve -->
+<div class="modal fade" id="approveConfirmationModal" tabindex="-1" aria-labelledby="approveConfirmationModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="approveConfirmationModalLabel">Konfirmasi Approve</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Apakah Anda yakin ingin menyetujui ini?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-primary" id="confirmApproveButton">Approve</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 {% endblock %}
@@ -151,6 +172,8 @@
     var getDebtorOrdersUrl = "{{ url_for('getDebtorOrders') }}";
     var getDebtorHistorysUrl = "{{ url_for('getDebtorHistorys') }}";
     var getCreditorOrdersUrl = "{{ url_for('getCreditorOrders') }}";
+    var getCreditorHistorysUrl = "{{ url_for('getCreditorHistorys') }}";
+    var approvedPaymentFromDebtorUrl = "{{ url_for('approvedPaymentFromDebtor') }}";
     var getCreditorsUrl = "{{ url_for('getUsers') }}";
     var createTransactionUrl = "{{ url_for('createTransaction') }}";
     var createMoneyTransferToDebtorUrl = "{{ url_for('createMoneyTransferToDebtor') }}";
@@ -248,7 +271,10 @@
                     getCreditorOrders()
                     hideLoading()
                 } else {
+                    showLoading()
                     tableContainer.empty()
+                    tableContainer.html(creditorHistorysHtml)
+                    getCreditorHistorys()
                     hideLoading();
                 }
 
@@ -267,11 +293,34 @@
             var debtorId = $(this).data('debtorid');
             var debtorName = $(this).data('debtorname');
             var transactionsId = $(this).data('transactionsid');
-            console.log(totalAmount,debtorId,debtorName, transactionsId)
+            console.log(totalAmount, debtorId, debtorName, transactionsId)
             $("#uploadReceiptOfMoneyTransferAmount").val(totalAmount);
             $("#uploadReceiptOfMoneyTransferDebtorId").val(debtorId);
             $("#uploadReceiptOfMoneyTransferDebtorName").val(debtorName);
             $("#transactionsId").val(transactionsId);
+
+        });
+
+        $(document).on("click",".approveButton", function () {
+            console.log("approve Click")
+            // Ambil ID transaksi dari data attribute
+            var transactionsId = $(this).data('transactionsid');
+            // Tampilkan modal konfirmasi
+            showModal($("#approveConfirmationModal"))
+            // Tangani klik tombol Approve di dalam modal konfirmasi
+            $('#confirmApproveButton').click(function () {
+                var data = new FormData();
+                data.append('transactionsId', transactionsId);
+
+                approvedPaymentFromDebtor(data);
+                getCreditorOrders()
+                hideLoading()
+
+
+
+                closeModal("approveConfirmationModal")
+
+            });
 
         });
 

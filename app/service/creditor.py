@@ -43,17 +43,30 @@ def getCreditorReceivables():
 
 def getCreditorOrders():
     result = creditor.getCreditorOrders()
-    debtDicts = []
+    transactionDicts = []
     for row in result:
-        debtDict = {
+        transactionDict = {
             'debtorId': row[0],
             'debtor': row[1],
             'total_amount': float(row[2]),
             'status': row[3],
             'id': row[4]
         }
-        debtDicts.append(debtDict)
-    return debtDicts
+        transactionDicts.append(transactionDict)
+    return transactionDicts
+
+def getCreditorHistorys():
+    result = creditor.getCreditorHistorys()
+    transactionDicts = []
+    for row in result:
+        transactionDict = {
+            'debtorId': row[0],
+            'debtor': row[1],
+            'total_amount': float(row[2]),
+            'status': row[3]
+        }
+        transactionDicts.append(transactionDict)
+    return transactionDicts
 
 def createMoneyTransferToDebtor(file,transactionsId):
     timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
@@ -61,4 +74,9 @@ def createMoneyTransferToDebtor(file,transactionsId):
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     print ("transactionsId : ", transactionsId)
     result = creditor.changeTransaksiStatusToUnpaid(transactionsId)    
+    return result
+
+def approvedPaymentFromDebtor(transactionsId):
+    print ("transactionsId : ", transactionsId)
+    result = creditor.changeTransaksiStatusToCompleted(transactionsId)    
     return result
