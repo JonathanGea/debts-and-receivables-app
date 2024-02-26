@@ -159,6 +159,20 @@
     </div>
 </div>
 
+<!-- Modal image -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Photo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <img src="" alt="" class="img-fluid">
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
 
@@ -192,6 +206,27 @@
     var debtor = "debtor"
 
     $(document).ready(function () {
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log ("foto masuk nih")
+            // Dapatkan elemen modal dan gambar
+            var modal = document.getElementById('exampleModal');
+            var img = modal.querySelector('img');
+
+            // Tambahkan event listener ke tautan "see receipt"
+            document.querySelectorAll('[data-bs-target="#exampleModal"]').forEach(function (link) {
+                link.addEventListener('click', function () {
+                    // Dapatkan nilai atribut data-payment_receipt_filename_creditor
+                    var paymentReceiptFilename = this.getAttribute('data-payment_receipt_filename_creditor');
+
+                    // Periksa apakah nilainya tidak kosong
+                    if (paymentReceiptFilename) {
+                        // Ubah src dari elemen gambar sesuai dengan nilai yang diperoleh
+                        img.src = "{{ url_for('static', filename='uploads/payment_receipt_debtor_') }}" + paymentReceiptFilename;
+                    }
+                });
+            });
+        });
+
 
         var selectedRole = $('#roleSelect').val()
         var menu = 'home'
@@ -301,7 +336,7 @@
 
         });
 
-        $(document).on("click",".approveButton", function () {
+        $(document).on("click", ".approveButton", function () {
             console.log("approve Click")
             // Ambil ID transaksi dari data attribute
             var transactionsId = $(this).data('transactionsid');
@@ -315,15 +350,19 @@
                 approvedPaymentFromDebtor(data);
                 getCreditorOrders()
                 hideLoading()
-
-
-
                 closeModal("approveConfirmationModal")
-
             });
 
         });
+        $(document).on("click", ".closeCollapse", function () {
+            var name = $(this).closest('.collapse').attr('id');
+            console.log("#" + name)
+            console.log("class : ", $("#" + name).attr('class'));
+            console.log("HTML : ", $(target)[0].outerHTML);
 
+
+            $("#" + name).collapse('hide');
+        });
 
     });
 

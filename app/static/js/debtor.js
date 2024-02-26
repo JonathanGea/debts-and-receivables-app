@@ -34,8 +34,8 @@ $("#submitpayDebtFormButton").click(function () {
         $("#proofPaymentFile").after('<div class="invalid-feedback proofPaymentFile-error-message">proofPaymentFile id required.</div>');
         isValid = false;
     }
-    
-    if (isValid){
+
+    if (isValid) {
         var formData = new FormData();
         formData.append('file', proofPaymentFile);
         formData.append('transactionsId', transactionsId);
@@ -43,7 +43,7 @@ $("#submitpayDebtFormButton").click(function () {
         getLoansAndDisplayInCard()
         hideLoading()
     }
-    
+
 
 });
 
@@ -105,7 +105,7 @@ $("#submitApplyFormLoanButton").click(function () {
         $("#estimatedReturnDate").addClass("is-invalid");
         $("#estimatedReturnDate").after('<div class="invalid-feedback amount-error-message">The date required.</div>');
         isValid = false;
-    }else if (estimatedReturnDate < today) {
+    } else if (estimatedReturnDate < today) {
         $("#estimatedReturnDate").addClass("is-invalid");
         $("#estimatedReturnDate").after('<div class="invalid-feedback amount-error-message">The date must be greater than today.</div>');
         isValid = false;
@@ -206,33 +206,61 @@ function getDebtorOrders() {
 
                         var cardItem = `
                         <div class="card m-2">
-                            <div class="row m-1">
-                                <div class="col-6">
-                                    <label class="mb-1 fw-bold">${debt.creditor}</label>
-                                    <p class="text-muted">${formattedAmount}</p>
-                                </div>
-                                <div class="col-6 text-end">
-                                    <span
-                                        class="badge ${debt.status === 'submitted' ? 'text-bg-primary' : debt.status === 'awaiting creditor approval' ? 'text-bg-success' : ''}">${debt.status}</span>
-                                </div>
-                                <div class="accordion" id="accordionExample">
-                                    <div class="accordion-item">
-                                        <h2 class="accordion-header">
-                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                                                Accordion Item #1
-                                            </button>
-                                        </h2>
-                                        <div id="flush-collapseOne" class="accordion-collapse collapse"
-                                            data-bs-parent="#accordionFlushExample">
-                                            <div class="accordion-body">Placeholder content for this accordion, which is intended to
-                                                demonstrate the <code>.accordion-flush</code> class. This is the first item's accordion
-                                                body.</div>
-                                        </div>
-                                    </div>
+                        <div class="row m-1">
+                            <div class="col-6">
+                                <label class="mb-1 fw-bold">${debt.creditor}</label>
+                                <p class="text-muted">${formattedAmount}</p>
+                            </div>
+                            <div class="col-6 text-end">
+                                <span
+                                    class="badge ${debt.status === 'submitted' ? 'text-bg-primary' : debt.status === 'awaiting creditor approval' ? 'text-bg-success' : ''}">${debt.status}
+                                </span>
+                                <div>
+                                <a class="collapse-button" data-name="orderCollapse-${debt.id}"  style="text-decoration: none; cursor: pointer;">
+                                    see details <i class="bi bi-chevron-double-down"></i>
+                                </a>
                                 </div>
                             </div>
+                            <div class="collapse" id="orderCollapse-${debt.id}">
+                                <div>
+                                    <div class="stepper d-flex flex-column ml-2">
+                                        <div class="d-flex mb-1">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div>
+                                                    <i class="bi bi-check-circle-fill" style="color: green;"></i></h6>
+                                                </div>
+                                                <div class="line h-100"></div>
+                                            </div>
+                                            <div>
+                                                <span class="text-dark m-1 ">
+                                                    <strong>Create your application respository</strong>
+                                                </span>
+                                                <p class="text-muted m-1">Choose your website name & create repository</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex mb-1">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div>
+                                                    <i class="bi bi-check-circle-fill" style="color: green;"></i></h6>
+                                                </div>
+                                                <div class="line h-100"></div>
+                                            </div>
+                                            <div>
+                                                <span class="text-dark m-1 ">
+                                                    <strong>Create your application respository</strong>
+                                                </span>
+                                                <p class="text-muted m-1">Choose your website name & create repository</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+            
+                            </div>
                         </div>
+            
+            
+                    </div>
                     `;
                         creditorsList.append(cardItem);
                     });
@@ -268,20 +296,93 @@ function getDebtorHistorys() {
                         </div>
                     `);
                 } else {
-                    data.forEach(function (debt, index) {
-                        var formattedAmount = formatCurrencyIDR(debt.total_amount);
+                    data.forEach(function (transaksion, index) {
+                        var formattedAmount = formatCurrencyIDR(transaksion.total_amount);
 
                         var cardItem = `
                         <div class="card m-2">
                             <div class="row m-1">
                                 <div class="col-6">
-                                    <label class="mb-1 fw-bold">${debt.creditor}</label>
+                                    <label class="mb-1 fw-bold">${transaksion.creditor}</label>
                                     <p class="text-muted">${formattedAmount}</p>
                                 </div>
                                 <div class="col-6 text-end">
-                                <span class="badge ${debt.status === 'submitted' ? 'text-bg-primary' : debt.status === 'awaiting creditor approval' ? 'text-bg-success' : ''}">${debt.status}</span>
+                                    <span class="badge text-bg-success">success</span>
+                                    <div>
+                                        <a class="collapse-button" data-name="historyCollapse-${transaksion.id}"
+                                            style="text-decoration: none; cursor: pointer;">
+                                            see details <i class="bi bi-chevron-double-down"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="historyCollapse-${transaksion.id}">
+                                    <div class="stepper d-flex flex-column ml-2">
+                                        <div class="d-flex mb-1">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div>
+                                                    <i class="bi bi-check-circle-fill" style="color: green;"></i>
+                                                </div>
+                                                <div class="line h-100"></div>
+                                            </div>
+                                            <div>
+                                                <span class="text-dark m-1 ">
+                                                    <strong>you applies a loan to ${transaksion.creditor}.</strong>
+                                                </span>
+                                                <div>
+                                                    <p class="text-muted m-1">${ubahFormatTanggal(transaksion.submitted_at)} </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                
+                                        <div class="d-flex mb-1">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div>
+                                                    <i class="bi bi-check-circle-fill" style="color: green;"></i></h6>
+                                                </div>
+                                                <div class="line h-100"></div>
+                                            </div>
+                                            <div>
+                                                <span class="text-dark m-1 ">
+                                                    <strong>${transaksion.creditor} sends money to you </strong>
+                                                </span>
+                                                <p class="text-muted m-1">${ubahFormatTanggal(transaksion.creditor_send_money_at)}
+                                                <a style="color:blue; text-decoration: none; cursor: pointer; margin: 5px;" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                                data-payment_receipt_filename_creditor="${transaksion.payment_receipt_filename_creditor}"> see receipt </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex mb-1">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div>
+                                                    <i class="bi bi-check-circle-fill" style="color: green;"></i></h6>
+                                                </div>
+                                                <div class="line h-100"></div>
+                                            </div>
+                                            <div>
+                                                <span class="text-dark m-1 ">
+                                                    <strong>you pays money to ${transaksion.creditor} </strong>
+                                                </span>
+                                                <p class="text-muted m-1">${ubahFormatTanggal(transaksion.debtor_pay_at)}</p>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex mb-1">
+                                            <div class="d-flex flex-column align-items-center">
+                                                <div>
+                                                    <i class="bi bi-check-circle-fill" style="color: green;"></i></h6>
+                                                </div>
+                                                <div class="line h-100"></div>
+                                            </div>
+                                            <div>
+                                                <span class="text-dark m-1 ">
+                                                    <strong>${transaksion.creditor} approves the payment </strong>
+                                                </span>
+                                                <p class="text-muted m-1">${ubahFormatTanggal(transaksion.creditor_approved_payment_at)}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                
                         </div>
                     `;
                         creditorsList.append(cardItem);

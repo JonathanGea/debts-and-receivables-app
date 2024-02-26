@@ -33,7 +33,8 @@ def getDebtorOrders():
             'creditorId': row[0],
             'creditor': row[1],
             'total_amount': float(row[2]),
-            'status': row[3]
+            'status': row[3],
+            'id': row[4]
         }
         debtDicts.append(debtDict)
     return debtDicts
@@ -46,7 +47,14 @@ def getDebtorHistorys():
             'creditorId': row[0],
             'creditor': row[1],
             'total_amount': float(row[2]),
-            'status': row[3]
+            'status': row[3],
+            'id': row[4],
+            'submitted_at': row[5],
+            'creditor_send_money_at': row[6],
+            'debtor_pay_at': row[7],
+            'creditor_approved_payment_at': row[8],
+            'payment_receipt_filename_creditor': row[9],
+            'payment_receipt_filename_debitor': row[10]
         }
         debtDicts.append(debtDict)
     return debtDicts
