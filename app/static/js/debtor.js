@@ -143,28 +143,84 @@ function getLoansAndDisplayInCard() {
                         </div>
                     `);
                 } else {
-                    data.forEach(function (debt, index) {
-                        var formattedAmount = formatCurrencyIDR(debt.total_amount);
+                    data.forEach(function (transaksion, index) {
+                        var formattedAmount = formatCurrencyIDR(transaksion.total_amount);
 
                         var cardItem = `
                         <div class="card m-2">
                             <div class="row m-1">
                                 <div class="col-7">
-                                    <label class="mb-1 fw-bold">${debt.creditor}</label>
+                                    <label class="mb-1 fw-bold">${transaksion.creditor}</label>
                                     <p class="text-muted">${formattedAmount}</p>
                                 </div>
                                 <div class="col-5 text-end">
-                                    <button type="button" class="btn btn-success btn-lg openPayDebtModalButton mt-2"
-                                        id="openPayDebtModalButton" 
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#payDebtModal"
-                                        data-totalAmount="${formattedAmount}"
-                                        data-creditorId="${debt.creditorId}"
-                                        data-transactionsid="${debt.id}"
-                                        data-creditorName="${debt.creditor}">💵 Pay
-                                    </button>
+                                    <div>
+                                        <button type="button" class="btn btn-success btn-lg openPayDebtModalButton mt-2"
+                                            id="openPayDebtModalButton" 
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#payDebtModal"
+                                            data-totalAmount="${formattedAmount}"
+                                            data-creditorId="${transaksion.creditorId}"
+                                            data-transactionsid="${transaksion.id}"
+                                            data-creditorName="${transaksion.creditor}">💵 Pay
+                                        </button>
+                                    </div>
+                                    <div>
+                                        <a class="collapse-button" data-name="orderCollapse-${transaksion.id}"  style="text-decoration: none; cursor: pointer;">see details <i class="bi bi-chevron-double-down"></i></a>
+                                    </div>
+                                </div>
+                                <div class="collapse" id="orderCollapse-${transaksion.id}">
+                                        <div class="stepper d-flex flex-column ml-2">
+                                        <div class="d-flex mb-1">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <div>
+                                                <i class="bi bi-check-circle-fill" style="color: green;"></i></h6>
+                                            </div>
+                                            <div class="line h-100"></div>
+                                        </div>
+                                        <div>
+                                            <span class="text-dark m-1 ">
+                                                <strong>you applies a loan to ${transaksion.creditor}.</strong>
+                                            </span>
+                                            <div>
+                                                <p class="text-muted m-1">${ubahFormatTanggal(transaksion.submitted_at)}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-1">
+                                        <div class="d-flex flex-column align-items-center">
+                                            <div>
+                                                <i class="bi bi-check-circle-fill" style="color: green;"></i></h6>
+                                            </div>
+                                            <div class="line h-100"></div>
+                                        </div>
+                                        <div>
+                                            <span class="text-dark m-1 ">
+                                                <strong>${transaksion.creditor} sends money to you</strong>
+                                            </span>
+                                            <p class="text-muted m-1">${ubahFormatTanggal(transaksion.creditor_send_money_at)}
+                                            <a style="color:blue; text-decoration: none; cursor: pointer; margin: 5px;" data-bs-toggle="modal" data-bs-target="#receiptModal"
+                                            data-payment_receipt_filename="${transaksion.payment_receipt_filename_creditor}" class="openReciptModalButton"> see receipt </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex mb-1">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <div>
+                                            <i class="bi bi-arrow-right-circle-fill" style="color: orange;"></i></h6>
+                                        </div>
+                                        <div class="line h-100"></div>
+                                    </div>
+                                    <div>
+                                        <span class="text-dark m-1 ">
+                                            <strong>Waiting you pays money to  ${transaksion.creditor}.</strong>
+                                        </span>
+                                    </div>
+                                </div>
                                 </div>
                             </div>
+                                
+
                         </div>
                     `;
                         creditorsList.append(cardItem);

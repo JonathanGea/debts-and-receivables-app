@@ -22,7 +22,8 @@ def getcreditorLoans():
             'amount': float(row[1]), 
             'description': row[2],
             'created_at': row[3],
-            'estimated_return_date': row[4]
+            'estimated_return_date': row[4],
+            
         }
         loan_dicts.append(loan_dict)
 
@@ -36,6 +37,14 @@ def getCreditorReceivables():
             'id': row[0],
             'debtor': row[1],
             'total_amount': float(row[2]), 
+            'status': row[3],
+            'id': row[4],
+            'submitted_at': row[5],
+            'creditor_send_money_at': row[6],
+            'debtor_pay_at': row[7],
+            'creditor_approved_payment_at': row[8],
+            'payment_receipt_filename_creditor': row[9],
+            'payment_receipt_filename_debitor': row[10]           
         }
         loan_dicts.append(loan_dict)
 
@@ -50,7 +59,13 @@ def getCreditorOrders():
             'debtor': row[1],
             'total_amount': float(row[2]),
             'status': row[3],
-            'id': row[4]
+            'id': row[4],
+            'submitted_at': row[5],
+            'creditor_send_money_at': row[6],
+            'debtor_pay_at': row[7],
+            'creditor_approved_payment_at': row[8],
+            'payment_receipt_filename_creditor': row[9],
+            'payment_receipt_filename_debitor': row[10] 
         }
         transactionDicts.append(transactionDict)
     return transactionDicts
@@ -63,7 +78,14 @@ def getCreditorHistorys():
             'debtorId': row[0],
             'debtor': row[1],
             'total_amount': float(row[2]),
-            'status': row[3]
+            'status': row[3],
+            'id': row[4],
+            'submitted_at': row[5],
+            'creditor_send_money_at': row[6],
+            'debtor_pay_at': row[7],
+            'creditor_approved_payment_at': row[8],
+            'payment_receipt_filename_creditor': row[9],
+            'payment_receipt_filename_debitor': row[10]
         }
         transactionDicts.append(transactionDict)
     return transactionDicts

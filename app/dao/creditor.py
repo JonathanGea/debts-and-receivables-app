@@ -8,7 +8,15 @@ def getCreditorReceivables():
         SELECT
             debtor.id AS id,
             debtor.name AS creditor,
-            transactions.amount AS amount
+            transactions.amount AS amount,
+            transactions.status,
+            transactions.id as id,
+            transactions.submitted_at,
+            transactions.creditor_send_money_at,
+            transactions.debtor_pay_at,
+            transactions.creditor_approved_payment_at,
+            transactions.payment_receipt_filename_creditor,
+            transactions.payment_receipt_filename_debitor
         FROM
             "debts-and-receivables-app".transactions AS transactions
         JOIN
@@ -34,7 +42,13 @@ def getCreditorOrders():
             debtor.name AS debtor,
             transactions.amount AS amount,
             transactions.status,
-            transactions.id
+            transactions.id as id,
+            transactions.submitted_at,
+            transactions.creditor_send_money_at,
+            transactions.debtor_pay_at,
+            transactions.creditor_approved_payment_at,
+            transactions.payment_receipt_filename_creditor,
+            transactions.payment_receipt_filename_debitor
         FROM
             "debts-and-receivables-app".transactions AS transactions
         JOIN
@@ -60,7 +74,13 @@ def getCreditorHistorys():
             debtor.name AS debtor,
             transactions.amount AS amount,
             transactions.status,
-            transactions.id
+            transactions.id as id,
+            transactions.submitted_at,
+            transactions.creditor_send_money_at,
+            transactions.debtor_pay_at,
+            transactions.creditor_approved_payment_at,
+            transactions.payment_receipt_filename_creditor,
+            transactions.payment_receipt_filename_debitor
         FROM
             "debts-and-receivables-app".transactions AS transactions
         JOIN

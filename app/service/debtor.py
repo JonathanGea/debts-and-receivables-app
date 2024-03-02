@@ -19,7 +19,13 @@ def getDebts():
             'creditorId': row[0],
             'creditor': row[1],
             'total_amount': float(row[2]),
-            'id': row[3]
+            'id': row[3],
+            'submitted_at': row[4],
+            'creditor_send_money_at': row[5],
+            'debtor_pay_at': row[6],
+            'creditor_approved_payment_at': row[7],
+            'payment_receipt_filename_creditor': row[8],
+            'payment_receipt_filename_debitor': row[9]
         }
         debtDicts.append(debtDict)
     return debtDicts

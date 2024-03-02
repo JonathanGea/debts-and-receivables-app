@@ -42,7 +42,7 @@ var creditorProfileHtml = `
         <div class="mb-3">
             <label for="exampleFormControlInput1" class="form-label">unique code</label>
             <div class="row">
-                <div class="col-10">
+                <div class="col-9">
                     <input type="text" class="form-control" id="uniqueCodeInput" value="${currentUser.uniqueCode}" readonly>
                 </div>
                 <div class="col-2 text-end">
