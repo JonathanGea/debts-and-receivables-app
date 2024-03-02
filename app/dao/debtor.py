@@ -35,7 +35,13 @@ def getDebtorOrders():
             creditor.name AS creditor,
             transactions.amount AS amount,
             transactions.status,
-            transactions.id as id
+            transactions.id as id,
+            transactions.submitted_at,
+            transactions.creditor_send_money_at,
+            transactions.debtor_pay_at,
+            transactions.creditor_approved_payment_at,
+            transactions.payment_receipt_filename_creditor,
+            transactions.payment_receipt_filename_debitor
         FROM
             "debts-and-receivables-app".transactions AS transactions
         JOIN
@@ -109,18 +115,22 @@ def createTransaction(creditorId,amount,description,estimatedReturnDate):
         print(f"Error in getcreditorLoans: {e}")
         return False
     
-def changeTransaksiStatusToWaitingforPaymentApproval(transactionsId):
+def changeTransaksiStatusToWaitingforPaymentApproval(filename, transactionsId):
     try:
         query = """
         UPDATE 
             "debts-and-receivables-app".transactions 
         SET 
             status = 'awaiting creditor approval',
-            creditor_send_money_at = CURRENT_TIMESTAMP
+            payment_receipt_filename_debitor = %(filename)s,
+            debtor_pay_at = CURRENT_TIMESTAMP
         WHERE 
             id = %(transactionsId)s
             """
-        parameter = {'transactionsId': transactionsId}
+        parameter = {
+            'transactionsId': transactionsId,
+            'filename': filename
+            }
         app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
         result = executeQuery(query,parameter)
         return result

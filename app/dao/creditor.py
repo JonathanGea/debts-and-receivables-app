@@ -78,18 +78,22 @@ def getCreditorHistorys():
         app.logger.error(f"error in getCreditorReceivables: {e}")
         return False
     
-def changeTransaksiStatusToUnpaid(transactionsId):
+def changeTransaksiStatusToUnpaid(filename,transactionsId):
     try:
         query = """
         UPDATE 
             "debts-and-receivables-app".transactions 
         SET 
             status = 'unpaid',
-            creditor_send_money_at = CURRENT_TIMESTAMP
+            creditor_send_money_at = CURRENT_TIMESTAMP,
+            payment_receipt_filename_creditor = %(filename)s
         WHERE 
             id = %(transactionsId)s
             """
-        parameter = {'transactionsId': transactionsId}
+        parameter = {
+            'transactionsId': transactionsId,
+            'filename': filename
+            }
         app.logger.info(f'executing SQL query: {query}, Parameters: {parameter}')
         result = executeQuery(query,parameter)
         return result

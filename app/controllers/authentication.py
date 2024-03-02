@@ -67,6 +67,11 @@ def register():
     
     if result:  
         userData = getUserByEmail(email)
+        print("=============================")
+        print("=============================")
+        print("=============================")
+        print("=============================")
+        print("new user data  : ", userData)
         user = User(userData[0], userData[1], userData[2], userData[3], userData[4])
         login_user(user)
         return jsonify({"message": "Registration successful", "redirect_url": url_for('home')}), 200

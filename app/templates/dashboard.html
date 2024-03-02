@@ -160,15 +160,14 @@
 </div>
 
 <!-- Modal image -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="receiptModal" tabindex="-1" aria-labelledby="receiptModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Photo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <img src="" alt="" class="img-fluid">
+            <div class="modal-body d-flex justify-content-center">
+                <img src="proof_money_tranfer_to_debtor_20240228145409.jpg" alt="" class="img-fluid" id="receipImage">
             </div>
         </div>
     </div>
@@ -206,26 +205,6 @@
     var debtor = "debtor"
 
     $(document).ready(function () {
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log ("foto masuk nih")
-            // Dapatkan elemen modal dan gambar
-            var modal = document.getElementById('exampleModal');
-            var img = modal.querySelector('img');
-
-            // Tambahkan event listener ke tautan "see receipt"
-            document.querySelectorAll('[data-bs-target="#exampleModal"]').forEach(function (link) {
-                link.addEventListener('click', function () {
-                    // Dapatkan nilai atribut data-payment_receipt_filename_creditor
-                    var paymentReceiptFilename = this.getAttribute('data-payment_receipt_filename_creditor');
-
-                    // Periksa apakah nilainya tidak kosong
-                    if (paymentReceiptFilename) {
-                        // Ubah src dari elemen gambar sesuai dengan nilai yang diperoleh
-                        img.src = "{{ url_for('static', filename='uploads/payment_receipt_debtor_') }}" + paymentReceiptFilename;
-                    }
-                });
-            });
-        });
 
 
         var selectedRole = $('#roleSelect').val()
@@ -362,6 +341,14 @@
 
 
             $("#" + name).collapse('hide');
+        });
+
+        $(document).on("click", ".openReciptModalButton", function () {
+            var paymentReceiptFilename = $(this).data('payment_receipt_filename');
+            var linkImage = "{{ url_for('static', filename='uploads/') }}" + paymentReceiptFilename;
+            console.log(linkImage)
+            var imgElement = $('#receipImage');
+            imgElement.attr('src', linkImage);
         });
 
     });

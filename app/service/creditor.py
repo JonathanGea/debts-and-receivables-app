@@ -73,7 +73,7 @@ def createMoneyTransferToDebtor(file,transactionsId):
     filename = f"proof_money_tranfer_to_debtor_{timestamp}.jpg"
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     print ("transactionsId : ", transactionsId)
-    result = creditor.changeTransaksiStatusToUnpaid(transactionsId)    
+    result = creditor.changeTransaksiStatusToUnpaid(filename,transactionsId)    
     return result
 
 def approvedPaymentFromDebtor(transactionsId):
